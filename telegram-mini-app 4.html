@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Legends Diamond Shop</title>
+    <style>
+        :root {
+            --primary-color: #2d0a42;
+            --secondary-color: #9c27b0;
+            --accent-color: #f1c40f;
+            --text-color: #ffffff;
+            --dark-accent: #8e24aa;
+            --light-accent: #ba68c8;
+            --button-color: #9c27b0;
+            --cart-button: #8e24aa;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--primary-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            flex: 1;
+            padding: 0 10px 70px;
+            overflow-y: auto;
+        }
+        
+        header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: var(--primary-color);
+        }
+        
+        header h1 {
+            margin-left: 15px;
+            font-size: 24px;
+        }
+        
+        .back-button {
+            width: 40px;
+            height: 40px;
+            background-color: var(--secondary-color);
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-decoration: none;
+            font-size: 24px;
+        }
+        
+        /* Product grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            padding: 15px 0;
+        }
+        
+        .product-card {
+            background-color: var(--secondary-color);
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .product-image {
+            width: 100%;
+            aspect-ratio: 4/3;
+            background-color: #218c74;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .product-status {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background-color: var(--accent-color);
+            color: black;
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-weight: bold;
+        }
+        
+        .product-content {
+            padding: 10px;
+        }
+        
+        .product-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .product-title svg {
+            margin-right: 5px;
+        }
+        
+        .product-price {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .add-to-cart {
+            background-color: var(--cart-button);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 15px;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .add-to-cart svg {
+            margin-right: 5px;
+        }
+        
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            border-left: 5px solid var(--secondary-color);
+            padding-left: 10px;
+        }
+        
+        .section-title a {
+            color: #bbb;
+            text-decoration: none;
+        }
+        
+        /* Profile styles */
+        .profile-header {
+            padding: 20px 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+            margin-right: 15px;
+            overflow: hidden;
+        }
+        
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .profile-info h2 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+        
+        .profile-info p {
+            color: #bbb;
+        }
+        
+        .divider {
+            height: 1px;
+            background-color: rgba(255, 255, 255, 0.1);
+            margin: 10px 0;
+        }
+        
+        .balance-section {
+            padding: 10px 15px;
+        }
+        
+        .balance-title {
+            color: #bbb;
+            margin-bottom: 5px;
+        }
+        
+        .balance-amount {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .balance-amount svg {
+            margin-left: 10px;
+        }
+        
+        .top-up-button {
+            background-color: var(--button-color);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            width: 100%;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .orders-message {
+            padding: 20px 15px;
+            color: #bbb;
+            text-align: center;
+        }
+        
+        /* Cart styles */
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+        }
+        
+        .empty-cart {
+            height: 60vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0.5;
+        }
+        
+        .empty-cart svg {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 20px;
+        }
+        
+        /* Bottom navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--primary-color);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 14px;
+        }
+        
+        .nav-item.active {
+            color: var(--text-color);
+            font-weight: bold;
+        }
+        
+        .discount-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #e74c3c;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .diamond {
+            color: var(--accent-color);
+            margin-right: 5px;
+        }
+
+        /* Special sale item */
+        .special-sale {
+            background: linear-gradient(45deg, #00c6ff, #0072ff);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            font-weight: bold;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Different pages will be shown/hidden via JavaScript -->
+    <div id="catalog-page">
+        <div class="container">
+            <div class="section-title">
+                <h2>Каталог</h2>
+            </div>
+            
+            <div class="product-grid">
+                <!-- Product cards for Mobile Legends Diamonds -->
+                <div class="product-card">
+                    <div class="product-image" style="background-color: #341a5e;">
+                        <img src="/api/placeholder/100/100" alt="8 + 3 Diamonds" style="width: 80px; height: 80px;">
+                    </div>
+                    <div class="product-content">
+                        <div class="product-title">
+                            <span class="diamond">💎</span> 8 + 3
+                        </div>
+                        <div class="product-price">55 ₽</div>
+                        <button class="add-to-cart" onclick="addToCart('8diamonds', '8 + 3 Diamonds', 55)">
+                            В Корзину 🛒
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image" style="background-color: #341a5e;">
+                        <img src="/api/placeholder/100/100" alt="32 + 3 Diamonds" style="width: 80px; height: 80px;">
+                    </div>
+                    <div class="product-content">
+                        <div class="product-title">
+                            <span class="diamond">💎</span> 32 + 3
+                        </div>
+                        <div class="product-price">55 ₽</div>
+                        <button class="add-to-cart" onclick="addToCart('32diamonds', '32 + 3 Diamonds', 55)">
+                            В Корзину 🛒
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image" style="background-color: #341a5e;">
+                        <img src="/api/placeholder/100/100" alt="80 + 8 Diamonds" style="width: 80px; height: 80px;">
+                    </div>
+                    <div class="product-content">
+                        <div class="product-title">
+                            <span class="diamond">💎</span> 80 + 8
+                        </div>
+                        <div class="product-price">125 ₽</div>
+                        <button class="add-to-cart" onclick="addToCart('80diamonds', '80 + 8 Diamonds', 125)">
+                            В Корзину 🛒
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image" style="background-color: #341a5e;">
+                        <img src="/api/placeholder/100/100" alt="120 + 12 Diamonds" style="width: 80px; height: 80px;">
+                    </div>
+                    <div class="product-content">
+                        <div class="product-title">
+                            <span class="diamond">💎</span> 120 + 12
+                        </div>
+                        <div class="product-price">200 ₽</div>
+                        <button class="add-to-cart" onclick="addToCart('120diamonds', '120 + 12 Diamonds', 200)">
+                            В Корзину 🛒
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image" style="background-color: #341a5e;">
+                        <img src="/api/placeholder/100/100" alt="239 + 25 Diamonds" style="width: 80px; height: 80px;">
+                    </div>
+                    <div class="product-content">
+                        <div class="product-title">
+                            <span class="diamond">💎</span> 239 + 25
+                        </div>
+                        <div class="product-price">400 ₽</div>
+                        <button class="add-to-cart" onclick="addToCart('239diamonds', '239 + 25 Diamonds', 400)">
+                            В Корзину 🛒
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image" style="background-color: #341a5e;">
+                        <img src="/api/placeholder/100/100" alt="396 + 44 Diamonds" style="width: 80px; height: 80px;">
+                    </div>
+                    <div class="product-content">
+                        <div class="product-title">
+                            <span class="diamond">💎</span> 396 + 44
+                        </div>
+                        <div class="product-price">650 ₽</div>
+                        <button class="add-to-cart" onclick="addToCart('396diamonds', '396 + 44 Diamonds', 650)">
+                            В Корзину 🛒
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image" style="background-color: #341a5e;">
+                        <img src="/api/placeholder/100/100" alt="633 + 101 Diamonds" style="width: 80px; height: 80px;">
+                    </div>
+                    <div class="product-content">
+                        <div class="product-title">
+                            <span class="diamond">💎</span> 633 + 101
+                        </div>
+                        <div class="product-price">1000 ₽</div>
+                        <button class="add-to-cart" onclick="addToCart('633diamonds', '633 + 101 Diamonds', 1000)">
+                            В Корзину 🛒
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image" style="background-color: #341a5e;">
+                        <img src="/api/placeholder/100/100" alt="791 + 142 Diamonds" style="width: 80px; height: 80px;">
+                    </div>
+                    <div class="product-content">
+                        <div class="product-title">
+                            <span class="diamond">💎</span> 791 + 142
+                        </div>
+                        <div class="product-price">1300 ₽</div>
+                        <button class="add-to-cart" onclick="addToCart('791diamonds', '791 + 142 Diamonds', 1300)">
+                            В Корзину 🛒
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image" style="background-color: #341a5e;">
+                        <img src="/api/placeholder/100/100" alt="1186 + 224 Diamonds" style="width: 80px; height: 80px;">
+                    </div>
+                    <div class="product-content">
+                        <div class="product-title">
+                            <span class="diamond">💎</span> 1186 + 224
+                        </div>
+                        <div class="product-price">1800 ₽</div>
+                        <button class="add-to-cart" onclick="addToCart('1186diamonds', '1186 + 224 Diamonds', 1800)">
+                            В Корзину 🛒
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image" style="background-color: #341a5e;">
+                        <img src="/api/placeholder/100/100" alt="1581 + 300 Diamonds" style="width: 80px; height: 80px;">
+                    </div>
+                    <div class="product-content">
+                        <div class="product-title">
+                            <span class="diamond">💎</span> 1581 + 300
+                        </div>
+                        <div class="product-price">2500 ₽</div>
+                        <button class="add-to-cart" onclick="addToCart('1581diamonds', '1581 + 300 Diamonds', 2500)">
+                            В Корзину 🛒
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image" style="background-color: #341a5e;">
+                        <img src="/api/placeholder/100/100" alt="2271 + 474 Diamonds" style="width: 80px; height: 80px;">
+                    </div>
+                    <div class="product-content">
+                        <div class="product-title">
+                            <span class="diamond">💎</span> 2271 + 474
+                        </div>
+                        <div class="product-price">3600 ₽</div>
+                        <button class="add-to-cart" onclick="addToCart('2271diamonds', '2271 + 474 Diamonds', 3600)">
+                            В Корзину 🛒
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image" style="background-color: #341a5e;">
+                        <img src="/api/placeholder/100/100" alt="5136 + 1027 Diamonds" style="width: 80px; height: 80px;">
+                    </div>
+                    <div class="product-content">
+                        <div class="product-title">
+                            <span class="diamond">💎</span> 5136 + 1027
+                        </div>
+                        <div class="product-price">8000 ₽</div>
+                        <button class="add-to-cart" onclick="addToCart('5136diamonds', '5136 + 1027 Diamonds', 8000)">
+                            В Корзину 🛒
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Cart Page -->
+    <div id="cart-page" style="display: none;">
+        <header>
+            <a href="#" class="back-button" onclick="showPage('catalog-page')">←</a>
+            <h1>Корзина</h1>
+            <div style="margin-left: auto; color: #4CAF50;">к оплате 0,00 руб</div>
+        </header>
+        
+        <div class="container">
+            <div id="cart-items">
+                <!-- Cart items will be added here -->
+            </div>
+            
+            <div id="empty-cart-message" class="empty-cart">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="8" cy="21" r="1"></circle>
+                    <circle cx="19" cy="21" r="1"></circle>
+                    <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+                </svg>
+                <p>Ваша корзина пуста</p>
+            </div>
+            
+            <div id="checkout-button-container" style="padding: 20px; display: none;">
+                <button class="top-up-button" onclick="checkout()">Оформить заказ</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Profile Page -->
+    <div id="profile-page" style="display: none;">
+        <header>
+            <a href="#" class="back-button" onclick="showPage('catalog-page')">←</a>
+            <h1>Профиль</h1>
+        </header>
+        
+        <div class="container">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <img src="/api/placeholder/60/60" alt="User Avatar">
+                </div>
+                <div class="profile-info">
+                    <h2>TelMoon</h2>
+                    <p>@TelMoon</p>
+                    <p>783643420</p>
+                </div>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div class="balance-section">
+                <div class="balance-title">Баланс</div>
+                <div class="balance-amount">0,00 ₽
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 10px;">
+                        <path d="M8 14v-4"></path>
+                        <path d="M12 16V8"></path>
+                        <path d="M16 14v-4"></path>
+                        <rect x="2" y="6" width="20" height="12" rx="2"></rect>
+                    </svg>
+                </div>
+                <button class="top-up-button">Пополнить Баланс</button>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div class="orders-message">
+                У вас нет заказов.
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <a href="#" class="nav-item active" id="catalog-nav" onclick="showPage('catalog-page')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+            </svg>
+            Каталог
+        </a>
+        <a href="#" class="nav-item" id="cart-nav" onclick="showPage('cart-page')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="8" cy="21" r="1"></circle>
+                <circle cx="19" cy="21" r="1"></circle>
+                <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"></path>
+            </svg>
+            Корзина
+        </a>
+        <a href="#" class="nav-item" id="profile-nav" onclick="showPage('profile-page')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            Профиль
+        </a>
+    </div>
+
+    <script>
+        // Initialize cart
+        let cart = [];
+        let totalAmount = 0;
+        
+        // Function to show different pages
+        function showPage(pageId) {
+            document.getElementById('catalog-page').style.display = 'none';
+            document.getElementById('cart-page').style.display = 'none';
+            document.getElementById('profile-page').style.display = 'none';
+            
+            document.getElementById(pageId).style.display = 'block';
+            
+            // Update active navigation
+            document.getElementById('catalog-nav').classList.remove('active');
+            document.getElementById('cart-nav').classList.remove('active');
+            document.getElementById('profile-nav').classList.remove('active');
+            
+            if (pageId === 'catalog-page') {
+                document.getElementById('catalog-nav').classList.add('active');
+            } else if (pageId === 'cart-page') {
+                document.getElementById('cart-nav').classList.add('active');
+                updateCartDisplay();
+            } else if (pageId === 'profile-page') {
+                document.getElementById('profile-nav').classList.add('active');
+            }
+        }
+        
+        // Function to add product to cart
+        function addToCart(id, name, price) {
+            // Check if product already in cart
+            const existingItem = cart.find(item => item.id === id);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: id,
+                    name: name,
+                    price: price,
+                    quantity: 1
+                });
+            }
+            
+            updateCartCount();
+            showNotification(`${name} добавлен в корзину`);
+        }
+        
+        // Update cart count in the navigation
+        function updateCartCount() {
+            const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
+            // You can update a badge here if needed
+        }
+        
+        // Show notification
+        function showNotification(message) {
+            // Simple notification
+            const notification = document.createElement('div');
+            notification.style.position = 'fixed';
+            notification.style.bottom = '80px';
+            notification.style.left = '50%';
+            notification.style.transform = 'translateX(-50%)';
+            notification.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+            notification.style.color = 'white';
+            notification.style.padding = '10px 20px';
+            notification.style.borderRadius = '20px';
+            notification.style.zIndex = '1000';
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transition = 'opacity 0.5s';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 500);
+            }, 2000);
+        }
+        
+        // Update cart display
+        function updateCartDisplay() {
+            const cartItemsContainer = document.getElementById('cart-items');
+            const emptyCartMessage = document.getElementById('empty-cart-message');
+            const checkoutButtonContainer = document.getElementById('checkout-button-container');
+            const totalAmountDisplay = document.querySelector('.cart-header div');
+            
+            cartItemsContainer.innerHTML = '';
+            totalAmount = 0;
+            
+            if (cart.length === 0) {
+                emptyCartMessage.style.display = 'flex';
+                checkoutButtonContainer.style.display = 'none';
+                document.querySelector('.cart-header div').textContent = 'к оплате 0,00 руб';
+                return;
+            }
+            
+            emptyCartMessage.style.display = 'none';
+            checkoutButtonContainer.style.display = 'block';
+            
+            // Create cart items
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                totalAmount += itemTotal;
+                
+                const cartItemElement = document.createElement('div');
+                cartItemElement.style.display = 'flex';
+                cartItemElement.style.alignItems = 'center';
+                cartItemElement.style.padding = '10px 15px';
+                cartItemElement.style.borderBottom = '1px solid rgba(255, 255, 255, 0.1)';
+                
+                cartItemElement.innerHTML = `
+                    <div style="flex: 1;">
+                        <div style="font-weight: bold;">${item.name}</div>
+                        <div>${item.price} ₽ x ${item.quantity}</div>
+                    </div>
+                    <div style="font-weight: bold;">${itemTotal} ₽</div>
+                    <button onclick="removeFromCart('${item.id}')" style="margin-left: 10px; background: none; border: none; color: #e74c3c; cursor: pointer;">✕</button>
+                `;
+                
+                cartItemsContainer.appendChild(cartItemElement);
+            });
+            
+            // Update total amount
+            document.querySelector('.cart-header div').textContent = `к оплате ${totalAmount.toFixed(2)} руб`;
+        }
+        
+        // Remove item from cart
+        function removeFromCart(id) {
+            const index = cart.findIndex(item => item.id === id);
+            
+            if (index !== -1) {
+                const item = cart[index];
+                
+                if (item.quantity > 1) {
+                    item.quantity -= 1;
+                } else {
+                    cart.splice(index, 1);
+                }
+                
+                updateCartCount();
+                updateCartDisplay();
+            }
+        }
+        
+        // Checkout function
+        function checkout() {
+            // Here you would handle the checkout process
+            // For example, sending the order to your backend
+            
+            alert('Заказ оформлен! Вы получите код на алмазы после подтверждения оплаты.');
+            cart = [];
+            updateCartCount();
+            showPage('catalog-page');
+        }
+        
+        // Initialize the app with the catalog page
+        showPage('catalog-page');
+    </script>
+</body>
+</html>
